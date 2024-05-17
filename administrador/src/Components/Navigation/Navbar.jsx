@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import "./css/Navbar.css";
 import Container from "react-bootstrap/Container";
@@ -43,15 +42,10 @@ function DrawerList() {
     { text: "Inicio", href: "/home", icon: <BsClockHistory /> },
     { text: "Usuarios", href: "/", icon: <BsPeople /> },
     { text: "Auditorias", icon: <BsCheckCircle />, subItems: [
-        { text: "Generar auditoria", href: "/datos" },
+        { text: "Generar auditoria", href: "/datos"},
         { text: "Revicion de auditoria", href: "/" },
         { text: "Auditorias terminadas", href: "/" }
       ] },
-    { text: "Agregar", icon: <BsCheckCircle />, subItems: [
-        { text: "Area", href: "/areas" },
-        { text: "Tipo de auditoria", href: "/" },
-        { text: "Programa", href: "/" }
-      ] }
   ];
 
   return (
@@ -72,17 +66,21 @@ function DrawerList() {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   {item.subItems.map((subItem, subIndex) => (
-                    <Dropdown.Item href={subItem.href} key={subIndex}>
-                      {subItem.text}
+                    <Dropdown.Item key={subIndex}>
+                      <button className="link-button" onClick={() => window.location.href=subItem.href}>
+                        {subItem.text}
+                      </button>
                     </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
             ) : (
               <ListItem disablePadding>
-                <ListItemButton component="a" href={item.href}>
-                  <span className="icono-lista" style={{ color: '#000000' }}>{item.icon}</span>
-                  <ListItemText primary={item.text} style={{ color: '#000000' }} />
+                <ListItemButton>
+                  <button className="link-button" onClick={() => window.location.href=item.href}>
+                    <span className="icono-lista" style={{ color: '#000000' }}>{item.icon}</span>
+                    <ListItemText primary={item.text} style={{ color: '#000000' }} />
+                  </button>
                 </ListItemButton>
               </ListItem>
             )}

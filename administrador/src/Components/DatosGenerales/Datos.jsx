@@ -18,6 +18,7 @@ const Datos = () => {
 
   const [formStep, setFormStep] = useState(1);
   const [areas, setAreas] = useState([]);
+  const [showOtherAreaInput, setShowOtherAreaInput] = useState(false);
 
   useEffect(() => {
     const fetchAreas = async () => {
@@ -53,24 +54,61 @@ const Datos = () => {
         [name]: value
       });
     }
+
+    if (name === 'AreasAudi' && value === 'Otro') {
+      setShowOtherAreaInput(true);
+      setFormData({
+        ...formData,
+        AreasAudi: '' // Clear AreasAudi to allow typing
+      });
+    } else if (name === 'AreasAudi' && !showOtherAreaInput) {
+      setShowOtherAreaInput(false);
+    }
   };
 
-  const handleNext = (e) => {
-    e.preventDefault();
-    setFormStep(prevStep => prevStep + 1);
+  const handleAreaChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
   };
 
   const handlePrevious = () => {
     setFormStep(prevStep => prevStep - 1);
   };
 
+  const handleNext = async (e) => {
+    e.preventDefault();
+    if (showOtherAreaInput) {
+      // No hagas nada aquí, espera a que se haga clic en "Generar"
+    }
+    setFormStep(prevStep => prevStep + 1);
+  };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (showOtherAreaInput) {
+        const newArea = { NombreArea: formData.AreasAudi };
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/areas`, newArea);
+        alert("Nueva área agregada con éxito");
+        const addedArea = response.data;
+  
+        setAreas(prevAreas => [...prevAreas, addedArea]); // Update the areas list with the new area
+  
+        setFormData({
+          ...formData,
+          AreasAudi: addedArea._id // Update AreasAudi with the new area's ID
+        });
+  
+        setShowOtherAreaInput(false);
+      }
+  
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/datos`, formData);
       alert("Guardado con éxito");
       console.log(response.data);
-
+  
       // Limpiar los campos del formulario después de agregar un usuario exitosamente
       setFormData({
         TipoAuditoria: '',
@@ -87,7 +125,7 @@ const Datos = () => {
       console.error(error);
       alert("Error al guardar los datos");
     }
-  };
+  };  
 
   return (
     <div className="registro-container">
@@ -106,6 +144,7 @@ const Datos = () => {
               <option value="FSSC 22000">FSSC 22000</option>
               <option value="Responsabilidad social">Responsabilidad social</option>
               <option value="Inspección de autoridades">Inspección de autoridades</option>
+              <option value="Otro">Otro</option>
             </select>
           </div>
           <div className="form-group">
@@ -114,12 +153,28 @@ const Datos = () => {
           </div>
           <div className="form-group">
             <label>Áreas auditadas:</label>
-            <select name="AreasAudi" value={formData.AreasAudi} onChange={handleChange} required>
-              <option value="">Seleccione...</option>
-              {areas.map(area => (
-                <option key={area._id} value={area.nombre}>{area.nombre}</option>
-              ))}
-            </select>
+{showOtherAreaInput ? (
+  <div>
+    <input
+      type="text"
+      name="AreasAudi"
+      value={formData.AreasAudi}
+      onChange={handleAreaChange}
+      placeholder="Escribe el nombre del área"
+      required
+    />
+    <button type="button" onClick={() => setShowOtherAreaInput(false)}>Cancelar</button>
+  </div>
+) : (
+  <select name="AreasAudi" value={formData.AreasAudi} onChange={handleChange} required>
+    <option value="">Seleccione...</option>
+    {areas.map(area => (
+      <option key={area._id} value={area.NombreArea}>{area.NombreArea}</option>
+    ))}
+    <option value="Otro">Otro</option>
+  </select>
+)}
+
           </div>
           <div className="form-group">
             <label>Auditados:</label>
