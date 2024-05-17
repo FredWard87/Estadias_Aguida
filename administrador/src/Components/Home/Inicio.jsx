@@ -16,14 +16,14 @@ const Inicio = () => {
   }, [images.length]);
 
   return (
-    <div className="inicio-container" style={{ backgroundImage: `url(${images[currentImageIndex]})`, position: 'relative' }}>
-      <div style={{ position: 'absolute', top: 0, left: 0 }}>
-        <Navigation />
-      </div>
-      <h1>Bienvenido</h1>
+  <div className="inicio-container" style={{ backgroundImage: `url(${images[currentImageIndex]})`, position: 'relative' }}>
+    <div style={{ position: 'absolute', top: 0, left: 0 }}>
+      <Navigation />
     </div>
-  );
-  
+    <h1>Bienvenido</h1>
+  </div>
+);
+
 };
 
 export default Inicio;

@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import "./css/Navbar.css";
 import Container from "react-bootstrap/Container";
@@ -26,7 +27,7 @@ export default function Navigation() {
       <Navbar className="navbar-custom" style={{backgroundColor: '#FAF845',  border: '2px solid #ffffff', borderRadius: '15%'}}>
         <Container>
           <IconButton onClick={toggleDrawer(true)} aria-label="menu" >
-            <MenuIcon style={{ color: '#000000', fontSize: '3rem', margin:'-5px'}} /> {/* Color blanco */}
+            <MenuIcon style={{ color: '#000000', fontSize: '3rem', margin:'-5px'}} /> {/* Color negro */}
           </IconButton>
           <Drawer open={open} onClose={toggleDrawer(false)}>
             <DrawerList />
@@ -42,9 +43,14 @@ function DrawerList() {
     { text: "Inicio", href: "/home", icon: <BsClockHistory /> },
     { text: "Usuarios", href: "/", icon: <BsPeople /> },
     { text: "Auditorias", icon: <BsCheckCircle />, subItems: [
-        { text: "Generar auditoria", href: "/" },
+        { text: "Generar auditoria", href: "/datos" },
         { text: "Revicion de auditoria", href: "/" },
         { text: "Auditorias terminadas", href: "/" }
+      ] },
+    { text: "Agregar", icon: <BsCheckCircle />, subItems: [
+        { text: "Area", href: "/areas" },
+        { text: "Tipo de auditoria", href: "/" },
+        { text: "Programa", href: "/" }
       ] }
   ];
 
