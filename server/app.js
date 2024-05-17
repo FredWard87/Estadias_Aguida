@@ -6,6 +6,8 @@ const logger = require('morgan');
 const cors = require('cors'); 
 const createError = require('http-errors');
 
+const datosRoutes = require('./routes/datosRoutes');
+const areasRoutes = require('./routes/areasRoutes');
 const usuariosRouter = require('./routes/usuarioRoutes'); 
 const loginRoutes = require('./routes/loginRoutes'); 
 
@@ -31,6 +33,8 @@ app.use((req, res, next) => {
 });
 
 // Configura las rutas
+app.use('/datos', datosRoutes);
+app.use('/areas', areasRoutes);
 app.use('/usuarios', usuariosRouter); 
 app.use('/', loginRoutes); 
 
