@@ -12,16 +12,12 @@ const obtenerAreas = async (req, res) => {
 const nuevaArea = async (req, res) => {
     try {
       const {
-        NombreArea,
-        Descripcion,
-        Ubicacion
+        NombreArea
       } = req.body;
   
       // Crear una nueva Auditoria
       const nuevaArea = new Areas({
-        NombreArea,
-        Descripcion,
-        Ubicacion
+        NombreArea
       });
   
       // Guardar los datos en la base de datos
