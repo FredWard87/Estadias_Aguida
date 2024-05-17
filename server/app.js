@@ -8,6 +8,8 @@ const createError = require('http-errors');
 
 const datosRoutes = require('./routes/datosRoutes');
 const areasRoutes = require('./routes/areasRoutes');
+const usuariosRouter = require('./routes/usuarioRoutes'); 
+const loginRoutes = require('./routes/loginRoutes'); 
 
 const app = express();
 
@@ -33,6 +35,8 @@ app.use((req, res, next) => {
 // Configura las rutas
 app.use('/datos', datosRoutes);
 app.use('/areas', areasRoutes);
+app.use('/usuarios', usuariosRouter); 
+app.use('/', loginRoutes); 
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {

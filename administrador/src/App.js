@@ -1,8 +1,15 @@
+
+// App.js
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Usuarios from "./Components/RegistroUsuarios/Usuarios";
+import Login from "./Components/login/LoginForm"; // Importa el componente de inicio de sesión
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Inicio from './components/Home/Inicio';
 import Datos from './components/DatosGenerales/Datos';
 import Areas from './components/Areas/Area';
+
 
 function App() {
   return (
@@ -12,6 +19,8 @@ function App() {
             <Route path="/home" element={<Inicio/>}/>
             <Route path="/datos" element={<Datos/>}/>
             <Route path="/areas" element={<Areas/>}/>
+            <Route path="/" element={<Login />} /> {/* Cambia la ruta raíz a la ruta de inicio de sesión */}
+          <Route path="/usuarios" element={<Usuarios />} />
           </Routes>
         </Router>
     </div>
