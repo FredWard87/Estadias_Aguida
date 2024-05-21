@@ -10,15 +10,21 @@ const Datos = () => {
     AreasAudi: '',
     Auditados: '',
     AuditorLider: '',
-    EquipoAuditor: '',
+    EquipoAuditor: [],
     Observador: false,
     NombresObservadores: '',
-    Programa: ''
+    Programa: []
   });
 
   const [formStep, setFormStep] = useState(1);
   const [areas, setAreas] = useState([]);
+  const [programas, setProgramas] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
   const [showOtherAreaInput, setShowOtherAreaInput] = useState(false);
+  const [auditorLiderSeleccionado, setAuditorLiderSeleccionado] = useState('');
+  const [equipoAuditorDisabled, setEquipoAuditorDisabled] = useState(false);
+
+  
 
   useEffect(() => {
     const fetchAreas = async () => {
@@ -33,6 +39,32 @@ const Datos = () => {
     fetchAreas();
   }, []);
 
+  useEffect(() => {
+    const fetchProgramas = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/programas`);
+        setProgramas(response.data);
+      } catch (error) {
+        console.error("Error al obtener los programas", error);
+      }
+    };
+
+    fetchProgramas();
+  }, []);
+
+  useEffect(() => {
+    const fetchUsuarios = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/usuarios`);
+        setUsuarios(response.data);
+      } catch (error) {
+        console.error("Error al obtener los usuarios", error);
+      }
+    };
+  
+    fetchUsuarios();
+  }, []);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === 'checkbox') {
@@ -40,7 +72,7 @@ const Datos = () => {
         setFormData({
           ...formData,
           [name]: checked,
-          NombresObservadores: '' 
+          NombresObservadores: ''
         });
       } else {
         setFormData({
@@ -53,6 +85,32 @@ const Datos = () => {
         ...formData,
         [name]: value
       });
+      if (name === 'AuditorLider') {
+        setAuditorLiderSeleccionado(value);
+      } else if (name === 'EquipoAuditor') {
+        if (value === 'No aplica') {
+          setFormData({
+            ...formData,
+            EquipoAuditor: []
+          });
+          setEquipoAuditorDisabled(true);
+        } else {
+          setFormData(prevFormData => {
+            const newEquipoAuditor = [...prevFormData.EquipoAuditor];
+            if (newEquipoAuditor.includes(value)) {
+              const index = newEquipoAuditor.indexOf(value);
+              newEquipoAuditor.splice(index, 1);
+            } else {
+              newEquipoAuditor.push(value);
+            }
+            return {
+              ...prevFormData,
+              EquipoAuditor: newEquipoAuditor
+            };
+          });
+          setEquipoAuditorDisabled(false);
+        }
+      }
     }
 
     if (name === 'AreasAudi' && value === 'Otro') {
@@ -85,10 +143,16 @@ const Datos = () => {
     }
     setFormStep(prevStep => prevStep + 1);
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+
+      if (formData.Programa.length === 0) {
+        alert("Por favor, seleccione al menos un programa.");
+        return; // Detener el envío del formulario si no se ha seleccionado ningún programa
+      }
+
       if (showOtherAreaInput) {
         const newArea = { NombreArea: formData.AreasAudi };
         const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/areas`, newArea);
@@ -105,6 +169,8 @@ const Datos = () => {
         setShowOtherAreaInput(false);
       }
   
+      console.log('Datos a enviar:', formData); // Agregar esta línea para depurar
+  
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/datos`, formData);
       alert("Guardado con éxito");
       console.log(response.data);
@@ -119,13 +185,49 @@ const Datos = () => {
         EquipoAuditor: '',
         Observador: false,
         NombresObservadores: '',
-        Programa: ''
+        Programa: []
       });
     } catch (error) {
-      console.error(error);
+      console.error('Error al guardar los datos:', error);
       alert("Error al guardar los datos");
     }
-  };  
+  };
+
+  const handleEquipChange = (e) => {
+    const { value } = e.target;
+    if (!equipoAuditorDisabled) {
+      if (value && !formData.EquipoAuditor.includes(value)) {
+        setFormData({
+          ...formData,
+          EquipoAuditor: [...formData.EquipoAuditor, value]
+        });
+      }
+    }
+  };
+
+  const handleEquipRemove = (equip) => {
+    setFormData({
+      ...formData,
+      EquipoAuditor: formData.EquipoAuditor.filter(e => e !== equip)
+    });
+  };
+
+  const handleProgramChange = (e) => {
+    const { value } = e.target;
+    if (value && !formData.Programa.includes(value)) {
+      setFormData({
+        ...formData,
+        Programa: [...formData.Programa, value]
+      });
+    }
+  };
+
+  const handleProgramRemove = (program) => {
+    setFormData({
+      ...formData,
+      Programa: formData.Programa.filter(p => p !== program)
+    });
+  };
 
   return (
     <div className="registro-container">
@@ -134,8 +236,9 @@ const Datos = () => {
       </div>
       {formStep === 1 && (
         <form onSubmit={handleNext}>
-          <h2>Datos generales:</h2>
-          <div className="form-group">
+          <h2>Datos generales:</h2> 
+          <div className="registro-form">
+          <div className="form-group" >
             <label>Tipo de auditoria:</label>
             <select name="TipoAuditoria" value={formData.TipoAuditoria} onChange={handleChange} required>
               <option value="">Seleccione...</option>
@@ -153,32 +256,37 @@ const Datos = () => {
           </div>
           <div className="form-group">
             <label>Áreas auditadas:</label>
-{showOtherAreaInput ? (
-  <div>
-    <input
-      type="text"
-      name="AreasAudi"
-      value={formData.AreasAudi}
-      onChange={handleAreaChange}
-      placeholder="Escribe el nombre del área"
-      required
-    />
-    <button type="button" onClick={() => setShowOtherAreaInput(false)}>Cancelar</button>
-  </div>
-) : (
-  <select name="AreasAudi" value={formData.AreasAudi} onChange={handleChange} required>
-    <option value="">Seleccione...</option>
-    {areas.map(area => (
-      <option key={area._id} value={area.NombreArea}>{area.NombreArea}</option>
-    ))}
-    <option value="Otro">Otro</option>
-  </select>
-)}
-
+            {showOtherAreaInput ? (
+              <div>
+                <input
+                  type="text"
+                  name="AreasAudi"
+                  value={formData.AreasAudi}
+                  onChange={handleAreaChange}
+                  placeholder="Escribe el nombre del área"
+                  required
+                />
+                <button type="button" onClick={() => setShowOtherAreaInput(false)}>Cancelar</button>
+              </div>
+            ) : (
+              <select name="AreasAudi" value={formData.AreasAudi} onChange={handleChange} required>
+                <option value="">Seleccione...</option>
+                {areas.map(area => (
+                  <option key={area._id} value={area.NombreArea}>{area.NombreArea}</option>
+                ))}
+                <option value="Otro">Otro</option>
+              </select>
+            )}
           </div>
           <div className="form-group">
             <label>Auditados:</label>
-            <input type="text" name="Auditados" value={formData.Auditados} onChange={handleChange} required />
+            <select name="Auditados" value={formData.Auditados} onChange={handleChange} required>
+              <option value="">Seleccione...</option>
+              {usuarios && usuarios.filter(usuario => usuario.TipoUsuario === 'auditado').map(usuario =>(
+                <option key={usuario._id} value={usuario.Nombre}>{usuario.Nombre}</option>
+              ))}
+            </select>
+          </div>
           </div>
           <button type="submit" className="btn-registrar">Siguiente</button>
         </form>
@@ -189,11 +297,30 @@ const Datos = () => {
           <h2>Datos del Auditor:</h2>
           <div className="form-group">
             <label>Auditor Líder:</label>
-            <input type="text" name="AuditorLider" value={formData.AuditorLider} onChange={handleChange} required />
+            <select name="AuditorLider" value={formData.AuditorLider} onChange={handleChange} required>
+              <option value="">Seleccione...</option>
+              {usuarios && usuarios.filter(usuario => usuario.TipoUsuario === 'auditor').map(usuario => (
+                <option key={usuario._id} value={usuario.Nombre}>{usuario.Nombre}</option>
+              ))}
+            </select>
           </div>
           <div className="form-group">
             <label>Equipo Auditor:</label>
-            <input type="text" name="EquipoAuditor" value={formData.EquipoAuditor} onChange={handleChange} required />
+            <select name="Equipo Auditor" value="" onChange={handleEquipChange} disabled={equipoAuditorDisabled}>
+              <option value="">Seleccione...</option>
+              <option value="No aplica">No aplica</option>
+              {usuarios && usuarios.filter(usuario => usuario.TipoUsuario === 'auditor' && usuario.Nombre !== auditorLiderSeleccionado).map(usuario => (
+                <option key={usuario._id} value={usuario.Nombre}>{usuario.Nombre}</option>
+              ))}
+            </select>
+          </div>
+          <div className="selected-programs">
+            {formData.EquipoAuditor.map((equip, index) => (
+              <div key={index} className="selected-program">
+                {equip}
+                <button type="button" onClick={() => handleEquipRemove(equip)}>X</button>
+              </div>
+            ))}
           </div>
           <div className="form-group">
             <label>
@@ -217,12 +344,20 @@ const Datos = () => {
           <h2>Programas:</h2>
           <div className="form-group">
             <label>Programa:</label>
-            <select name="Programa" value={formData.Programa} onChange={handleChange} required>
+            <select name="Programa" value="" onChange={handleProgramChange}>
               <option value="">Seleccione...</option>
-              <option value="Programa 1">Programa 1</option>
-              <option value="Programa 2">Programa 2</option>
-              <option value="Programa 3">Programa 3</option>
+              {programas.map(programa => (
+                <option key={programa._id} value={programa.Nombre}>{programa.Nombre}</option>
+              ))}
             </select>
+          </div>
+          <div className="selected-programs">
+            {formData.Programa.map((program, index) => (
+              <div key={index} className="selected-program">
+                {program}
+                <button type="button" onClick={() => handleProgramRemove(program)}>X</button>
+              </div>
+            ))}
           </div>
           <button type="button" className="btn-registrar" onClick={handlePrevious}>Regresar</button>
           <button type="submit" className="btn-registrar">Generar</button>

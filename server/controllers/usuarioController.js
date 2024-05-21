@@ -39,6 +39,16 @@ const registroUsuario = async (req, res) => {
   }
 };
 
+const obtenerUsuarios = async (req, res) => {
+  try {
+    const usuarios = await Usuarios.find();
+    res.status(200).json(usuarios);
+  } catch (error) {
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
 module.exports = {
-  registroUsuario
+  registroUsuario,
+  obtenerUsuarios
 };

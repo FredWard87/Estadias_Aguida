@@ -3,7 +3,7 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #FAF845;
+    background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
@@ -26,9 +26,11 @@
     border: 1px solid #ccc;
     border-radius: 4px;
   }
+
+  
   
   .btn-registrar {
-    background-color: #37D70F;
+    background-color: #00B096;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -37,7 +39,8 @@
   }
   
   .btn-registrar:hover {
-    background-color: #2aac09;
+    background-color: #00e7c5;
+    color: #000000;
   }
   
   .btn-registrar:not(:last-child) {

@@ -23,7 +23,7 @@ export default function Navigation() {
 
   return (
     <div style={{ backgroundColor: '#faf74500'}}>
-      <Navbar className="navbar-custom" style={{backgroundColor: '#FAF845',  border: '2px solid #ffffff', borderRadius: '15%'}}>
+      <Navbar className="navbar-custom" style={{backgroundColor: '#FFFFFF',  border: '2px solid #ffffff', borderRadius: '15%'}}>
         <Container>
           <IconButton onClick={toggleDrawer(true)} aria-label="menu" >
             <MenuIcon style={{ color: '#000000', fontSize: '3rem', margin:'-5px'}} /> {/* Color negro */}
@@ -40,7 +40,7 @@ export default function Navigation() {
 function DrawerList() {
   const drawerItems = [
     { text: "Inicio", href: "/home", icon: <BsClockHistory /> },
-    { text: "Usuarios", href: "/", icon: <BsPeople /> },
+    { text: "Usuarios", href: "/usuarios", icon: <BsPeople /> },
     { text: "Auditorias", icon: <BsCheckCircle />, subItems: [
         { text: "Generar auditoria", href: "/datos"},
         { text: "Revicion de auditoria", href: "/" },
@@ -49,9 +49,11 @@ function DrawerList() {
   ];
 
   return (
-    <Box sx={{ width: 250, height: '100%', backgroundColor: '#FAF845' }} role="presentation">
+    <Box sx={{ width: 250, height: '100%', backgroundColor: '#FFFFFF' }} role="presentation">
       <List>
+      <a href="/home">
       <img src={logo} alt="Logo Empresa" style={{ margin: 'auto', height: '20%', width: '204px', display: 'block', borderRadius: '10px' }} />
+      </a>
         {drawerItems.map((item, index) => (
           <div key={index}>
             {item.subItems ? (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import './css/Inicio.css';
+import './css/inicio.css'
 import nopal from "../../assets/img/nopal.jpg";
 import nopal2 from "../../assets/img/nopal2.jpg";
 import Navigation from "../Navigation/Navbar";

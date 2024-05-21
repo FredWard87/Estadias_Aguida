@@ -35,7 +35,7 @@ const LoginForm = () => {
   };
 
   if (loggedIn) {
-    return <Navigate to="/usuarios" />;
+    return <Navigate to="/home" />;
   }
 
   return (
