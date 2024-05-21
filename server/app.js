@@ -10,6 +10,7 @@ const datosRoutes = require('./routes/datosRoutes');
 const areasRoutes = require('./routes/areasRoutes');
 const usuariosRouter = require('./routes/usuarioRoutes'); 
 const loginRoutes = require('./routes/loginRoutes'); 
+const programasRoutes = require('./routes/programasRoutes')
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 app.use('/datos', datosRoutes);
 app.use('/areas', areasRoutes);
 app.use('/usuarios', usuariosRouter); 
+app.use('/programas', programasRoutes); 
 app.use('/', loginRoutes); 
 
 // Catch 404 and forward to error handler
