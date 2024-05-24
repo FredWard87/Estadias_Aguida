@@ -9,7 +9,14 @@ const DatosSchema = new mongoose.Schema({
   EquipoAuditor: { type: [String], required: true },
   Observador: { type: Boolean, required: true },
   NombresObservadores: { type: String, required: false },
-  Programa: { type: [String], required: true }  // Cambiado a array de strings
+  Programa: [
+    {
+      Nombre: { type: String, required: true },
+      Descripcion: { type: [String], required: true }
+    }
+  ],
+  Estado: { type: String, required: false },
+  Observaciones: { type: String, required: false }
 });
 
 module.exports = mongoose.model("Datos", DatosSchema);

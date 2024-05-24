@@ -11,7 +11,9 @@ const nuevoAuditoria = async (req, res) => {
       EquipoAuditor,
       Observador,
       NombresObservadores,
-      Programa
+      Programa,
+      Estado,
+      Observaciones
     } = req.body;
 
     // Crear una nueva Auditoria
@@ -24,7 +26,9 @@ const nuevoAuditoria = async (req, res) => {
       EquipoAuditor,
       Observador,
       NombresObservadores,
-      Programa
+      Programa,
+      Estado,
+      Observaciones
     });
 
     // Guardar los datos en la base de datos
