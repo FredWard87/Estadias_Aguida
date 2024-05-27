@@ -1,5 +1,16 @@
 const mongoose = require("mongoose");
 
+const DescripcionSchema = new mongoose.Schema({
+  Programas: { type: String, required: true },
+  Observacion: { type: String, required: true },
+  Hallazgo: { type: String, required: true }
+});
+
+const ProgramaSchema = new mongoose.Schema({
+  Nombre: { type: String, required: true },
+  Descripcion: [DescripcionSchema]
+});
+
 const DatosSchema = new mongoose.Schema({
   TipoAuditoria: { type: String, required: true },
   Duracion: { type: String, required: true },
@@ -9,12 +20,7 @@ const DatosSchema = new mongoose.Schema({
   EquipoAuditor: { type: [String], required: true },
   Observador: { type: Boolean, required: true },
   NombresObservadores: { type: String, required: false },
-  Programa: [
-    {
-      Nombre: { type: String, required: true },
-      Descripcion: { type: [String], required: true }
-    }
-  ],
+  Programa: [ProgramaSchema],
   Estado: { type: String, required: false },
   Observaciones: { type: String, required: false }
 });

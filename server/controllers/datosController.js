@@ -31,7 +31,6 @@ const nuevoAuditoria = async (req, res) => {
       Observaciones
     });
 
-    // Guardar los datos en la base de datos
     await nuevaAuditoria.save();
 
     res.status(201).json({ message: 'Auditoria generada exitosamente' });
