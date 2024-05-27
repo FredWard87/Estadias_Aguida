@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const areasController = require('../controllers/programasController');
+const programasController = require('../controllers/programasController');
 
-router.get('/', areasController.obtenerProgramas);
+router.get('/', programasController.obtenerProgramas);
+router.post('/', programasController.crearPrograma);
 
 module.exports = router;

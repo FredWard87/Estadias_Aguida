@@ -10,7 +10,6 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import { BsCheckCircle, BsClockHistory, BsPeople } from "react-icons/bs"; // Íconos de react-icons/bs
 import Dropdown from 'react-bootstrap/Dropdown';
 import logo from "../../assets/img/logoAguida.png";
 
@@ -22,11 +21,11 @@ export default function Navigation() {
   };
 
   return (
-    <div style={{ backgroundColor: '#faf74500'}}>
-      <Navbar className="navbar-custom" style={{backgroundColor: '#FFFFFF',  border: '2px solid #ffffff', borderRadius: '15%'}}>
+    <div className="navbar-container">
+      <Navbar className="navbar-custom">
         <Container>
           <IconButton onClick={toggleDrawer(true)} aria-label="menu" >
-            <MenuIcon style={{ color: '#000000', fontSize: '3rem', margin:'-5px'}} /> {/* Color negro */}
+            <MenuIcon className="menu-icon" />
           </IconButton>
           <Drawer open={open} onClose={toggleDrawer(false)}>
             <DrawerList />
@@ -39,9 +38,10 @@ export default function Navigation() {
 
 function DrawerList() {
   const drawerItems = [
-    { text: "Inicio", href: "/home", icon: <BsClockHistory /> },
-    { text: "Usuarios", href: "/usuarios", icon: <BsPeople /> },
-    { text: "Auditorias", icon: <BsCheckCircle />, subItems: [
+    { text: "Inicio", href: "/home" },
+    { text: "Usuarios", href: "/usuarios" },
+    { text: "Programa", href: "/programa" },
+    { text: "Auditorias", subItems: [
         { text: "Generar auditoria", href: "/datos"},
         { text: "Revicion de auditoria", href: "/" },
         { text: "Auditorias terminadas", href: "/" }
@@ -49,20 +49,19 @@ function DrawerList() {
   ];
 
   return (
-    <Box sx={{ width: 250, height: '100%', backgroundColor: '#FFFFFF' }} role="presentation">
+    <Box className="drawer-container">
       <List>
-      <a href="/home">
-      <img src={logo} alt="Logo Empresa" style={{ margin: 'auto', height: '20%', width: '204px', display: 'block', borderRadius: '10px' }} />
-      </a>
+        <a href="/home">
+          <img src={logo} alt="Logo Empresa" className="logo-img" />
+        </a>
         {drawerItems.map((item, index) => (
           <div key={index}>
             {item.subItems ? (
               <Dropdown>
-                <Dropdown.Toggle variant="transparent" style={{ border: 'none', background: 'transparent', color: '#ffffff' }}>
-                  <ListItem disablePadding>
+                <Dropdown.Toggle variant="transparent" className="dropdown-toggle">
+                  <ListItem disablePadding className="list-item">
                     <ListItemButton>
-                      <span className="icono-lista" style={{ color: '#000000' }}>{item.icon}</span>
-                      <ListItemText primary={item.text} style={{ color: '#000000' }} />
+                      <ListItemText primary={item.text} className="list-item-text" />
                     </ListItemButton>
                   </ListItem>
                 </Dropdown.Toggle>
@@ -77,11 +76,10 @@ function DrawerList() {
                 </Dropdown.Menu>
               </Dropdown>
             ) : (
-              <ListItem disablePadding>
+              <ListItem disablePadding className="list-item">
                 <ListItemButton>
                   <button className="link-button" onClick={() => window.location.href=item.href}>
-                    <span className="icono-lista" style={{ color: '#000000' }}>{item.icon}</span>
-                    <ListItemText primary={item.text} style={{ color: '#000000' }} />
+                    <ListItemText primary={item.text} className="list-item-text" />
                   </button>
                 </ListItemButton>
               </ListItem>

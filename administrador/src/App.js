@@ -6,8 +6,8 @@ import Usuarios from "./Components/RegistroUsuarios/Usuarios";
 import Login from "./Components/login/LoginForm"; // Importa el componente de inicio de sesión
 import './App.css';
 import Inicio from './Components/Home/inicio';
-import Datos from './Components/DatosGenerales/Datos'
-
+import Datos from './Components/DatosGenerales/Datos';
+import Programas from './Components/ProgramasIn/Programa';
 
 function App() {
   return (
@@ -15,9 +15,10 @@ function App() {
         <Router>
           <Routes>
             <Route path="/home" element={<Inicio/>}/>
+            <Route path="/programa" element={<Programas/>}/>
             <Route path="/datos" element={<Datos/>}/>
-            <Route path="/" element={<Login />} /> {/* Cambia la ruta raíz a la ruta de inicio de sesión */}
-          <Route path="/usuarios" element={<Usuarios />} />
+            <Route path="/" element={<Login />} /> {}
+            <Route path="/usuarios" element={<Usuarios />} />
           </Routes>
         </Router>
     </div>
